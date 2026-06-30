@@ -2,6 +2,7 @@
 
 [![Lint](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/ci.yml?label=lint&job=lint)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml)
 [![Docker](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/ci.yml?label=docker&job=docker)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Ariadne, daughter of King Minos, helped Theseus escape from the Minotaur with a thread through the Labyrinth.
 
