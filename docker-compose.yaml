@@ -9,7 +9,6 @@ services:
      - CHROMA_PORT=8000
      - DOCUMENT_COLLECTION=document
      - CHUNKS_COLLECTION=chunks
-     - BASE_INSTRUCTIONS=
      - CUSTOM_INSTRUCTIONS=${CUSTOM_INSTRUCTIONS}
     depends_on:
      - chromadb

@@ -13,7 +13,27 @@ import chromadb
 
 mcp = FastMCP(
     "Ariadne",
-    instructions=os.getenv("BASE_INSTRUCTIONS") + (os.getenv("CUSTOM_INSTRUCTIONS") or ""),
+    instructions=(
+        "You are Ariadne, a document retrieval assistant. You have access to "
+        "two tools:\n"
+        "\n"
+        "1. search(query, document_id?): semantic similarity search over document "
+        "chunks. Chunks are small text fragments extracted from ingested documents "
+        "and indexed with embeddings. Use this when the user asks questions about "
+        "document content. You can scope results to a single document by passing "
+        "its document_id (a UUID). Results are (chunks, metadata) pairs; each "
+        "metadata entry contains 'document_id' and 'chunk_idx'.\n"
+        "\n"
+        "2. fetch_document(name?, document_id?): retrieve a complete document as "
+        "Markdown from the document collection. Use this when the user wants the "
+        "full text rather than snippets, or to obtain a document_id for a "
+        "follow-up search. Provide exactly one of 'name' (original filename, "
+        "exact match) or 'document_id' (UUID assigned during ingestion).\n"
+        "\n"
+        "When a user asks about specific content, first use search to find "
+        "relevant chunks. If they need the broader context, follow up with "
+        "fetch_document using the document_id from search results."
+    ) + (os.getenv("CUSTOM_INSTRUCTIONS") or ""),
 )
 
 
@@ -35,7 +55,13 @@ async def get_client():
 
 @mcp.tool(
     name="search",
-    description="Search vector database.",
+    description="Perform semantic (vector) similarity search over document chunks. "
+    "Returns text fragments most relevant to the query. Use this when the user "
+    "asks questions about the content of ingested documents, needs to find "
+    "specific information, or wants to retrieve relevant passages. "
+    "Optionally pass a document_id (UUID returned by fetch_document) to scope "
+    "the search to a single document. Results include both the chunk text and "
+    "its metadata (document_id, chunk_idx).",
     annotations={
         "title": "Search",
         "readOnlyHint": True,
@@ -71,7 +97,13 @@ async def search(query: str, document_id: str | None = None):
 
 @mcp.tool(
     name="fetch_document",
-    description="Fetch document.",
+    description="Retrieve a complete document by its original filename (name) or "
+    "document_id (UUID). Use this when the user wants the full text of a "
+    "document rather than just relevant snippets, or when you need the "
+    "document_id to scope a follow-up search. Exactly one of 'name' or "
+    "'document_id' must be provided. Returns the full Markdown content and "
+    "metadata. 'name' is the original filename (e.g., 'report.pdf') and works "
+    "as an exact match. 'document_id' is the UUID assigned during ingestion.",
     annotations={
         "title": "Fetch Document",
         "readOnlyHint": True,
