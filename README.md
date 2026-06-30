@@ -1,5 +1,8 @@
 # 🧶 Ariadne
 
+[![Lint](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/ci.yml?label=lint&job=lint)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/ci.yml?label=docker&job=docker)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml)
+
 Ariadne, daughter of King Minos, helped Theseus escape from the Minotaur with a thread through the Labyrinth.
 
 Ariadne, the MCP server, helps your agents escape from the complex maze of your unstructured data.
@@ -78,8 +81,6 @@ The Ariadne MCP server is compatible with any non-web-based MCP client, such as 
 I'm [Mark Kikta](https://mkikta.com), and I am creating Ariadne to be a modular, end-to-end solution to the common problem of sharing a collection of unstructured data with your agents.
 
 
-## 💭 Feedback and Discussion
+## 🤝 Feedback and Contributing
 
-I would greatly appreciate feedback and any issues regaring bugs or feature requests.
-
-I encourage you to start a [Discussion](https://github.com/mkikta/ariadne/discussions) if you find this project useful or exciting!
+I encourage you to start a [Discussion](https://github.com/mkikta/ariadne/discussions) if you find this project useful or exciting! I would greatly appreciate feedback and any issues regaring bugs or feature requests. See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, coding standards, and pull request guidelines.
