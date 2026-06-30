@@ -5,7 +5,7 @@ from pathlib import Path
 import requests
 import mimetypes
 
-ENDPOINT="http://localhost:3000/upload/"
+ENDPOINT="http://localhost:3100/process_document/"
 
 def upload_file(path: Path):
     with open(path, "rb") as file:

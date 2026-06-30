@@ -1,14 +1,14 @@
 # Ariadne — Agent Guide
 
-Multi-service MCP stack for document ingestion, processing, and vector retrieval.
+Multi-service MCP stack for document management, processing, and vector retrieval.
 
 ## Project structure
 
 ```
-ingestion/     FastAPI server (port 3000) — file uploads, ChromaDB collection CRUD
+management/     FastAPI server (port 3000) — file uploads, ChromaDB collection CRUD
 processing/    FastAPI server (port 3100) — Docling convert/chunk/enrich, stores to ChromaDB
 mcp_server/    FastMCP server (port 8080) — tools: search (semantic), fetch_document
-scripts/       upload.py — CLI to batch-upload files to ingestion
+scripts/       upload.py — CLI to batch-upload files to processing
 llm/           serve_model.sh — pulls embedding model in Ollama container
 chromadb/      persisted vector database (gitignored)
 ollama/        persisted model data (gitignored)
@@ -21,13 +21,13 @@ Each service has its own `pyproject.toml` + `uv.lock`. All target **Python ≥3.
 
 ```sh
 # Sync dependencies for one or more services
-uv sync --directory ingestion
+uv sync --directory management
 uv sync --directory processing
 uv sync --directory mcp_server
 uv sync --directory scripts
 
 # Lint (ruff is the sole linter; no formatter configured)
-uv run --directory ingestion ruff check .
+uv run --directory management ruff check .
 uv run --directory processing ruff check .
 uv run --directory mcp_server ruff check .
 uv run --directory scripts ruff check .
@@ -43,7 +43,7 @@ docker compose up --build
 uv run --directory scripts upload.py --paths dir1 file2 ...
 
 # Run tests (none exist yet, but pytest is available)
-uv run --directory ingestion pytest
+uv run --directory management pytest
 ```
 
 ## CI
@@ -52,11 +52,11 @@ Two jobs: `lint` (ruff on all 4 packages) and `docker` (`docker compose build`).
 
 ## Architecture notes
 
-- **Ingestion** accepts uploads via `POST /upload/`, forwards the file to **Processing** over HTTP.
+- **Processing** accepts uploads via `POST /process_document/` and runs the Docling pipeline.
 - **Processing** uses Docling (`DocumentConverter` + `HybridChunker`) to produce markdown and contextualized chunks, stores both in ChromaDB.
 - **MCP server** exposes `search(query, document_id?)` and `fetch_document(name?, document_id?)`. Has a custom health endpoint at `GET /health`.
 - ChromaDB uses **qwen3-embedding:0.6b** by default (via Ollama). Once a model is set, you must continue using it — changing models invalidates persisted embeddings.
-- Collections are auto-created on ingestion container startup (`init_collections.py`): `document` (no embeddings) and `chunks` (with Ollama embeddings).
+- Collections are auto-created on management container startup (`init_collections.py`): `document` (no embeddings) and `chunks` (with Ollama embeddings).
 
 ## Style
 

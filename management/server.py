@@ -3,9 +3,8 @@ FastAPI server providing endpoints for document management and processing.
 """
 
 import os
-import requests
 from pydantic import BaseModel
-from fastapi import FastAPI, HTTPException, File, UploadFile, Form
+from fastapi import FastAPI, HTTPException
 import utils
 
 app = FastAPI()
@@ -161,41 +160,5 @@ async def get_all_documents(collection_name: str):
     try:
         results = await utils.get_all_documents(collection_name)
         return results
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@app.post("/upload/")
-async def upload(
-    document_collection_name: str = Form(...),
-    chunks_collection_name: str = Form(...),
-    file: UploadFile = File(...),
-):
-    """Upload a document for processing.
-
-    Args:
-        document_collection_name: Name of the document collection
-        chunks_collection_name: Name of the chunks collection for processed content
-        file: Upload file to process
-
-    Returns:
-        Dictionary containing the processing response data
-
-    Raises:
-        HTTPException: If document upload or processing fails
-    """
-    try:
-        response = requests.post(
-            f"http://{os.getenv("PROCESSING_HOST")}:{os.getenv("PROCESSING_PORT")}/process_document/",
-            files={"file": (file.filename, file.file, file.content_type)},
-            data={
-                "document_collection_name": document_collection_name,
-                "chunks_collection_name": chunks_collection_name,
-            },
-            timeout=30,
-        )
-        data = response.json()
-
-        return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

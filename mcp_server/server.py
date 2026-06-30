@@ -28,7 +28,7 @@ mcp = FastMCP(
         "Markdown from the document collection. Use this when the user wants the "
         "full text rather than snippets, or to obtain a document_id for a "
         "follow-up search. Provide exactly one of 'name' (original filename, "
-        "exact match) or 'document_id' (UUID assigned during ingestion).\n"
+        "exact match) or 'document_id' (UUID assigned during processing).\n"
         "\n"
         "When a user asks about specific content, first use search to find "
         "relevant chunks. If they need the broader context, follow up with "
@@ -103,7 +103,7 @@ async def search(query: str, document_id: str | None = None):
     "document_id to scope a follow-up search. Exactly one of 'name' or "
     "'document_id' must be provided. Returns the full Markdown content and "
     "metadata. 'name' is the original filename (e.g., 'report.pdf') and works "
-    "as an exact match. 'document_id' is the UUID assigned during ingestion.",
+    "as an exact match. 'document_id' is the UUID assigned during processing.",
     annotations={
         "title": "Fetch Document",
         "readOnlyHint": True,

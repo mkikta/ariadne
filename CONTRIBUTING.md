@@ -21,13 +21,13 @@ Ariadne is a multi-service application composed of three services, each in its o
 
 | Directory | Service | Description |
 |---|---|---|
-| `ingestion/` | Ingestion Server | FastAPI server for file uploads and ChromaDB collection management |
-| `processing/` | Processing Server | FastAPI server using Docling to convert, chunk, and enrich documents |
+| `management/` | Management Server | FastAPI server for ChromaDB collection management |
+| `processing/` | Processing Server | FastAPI server using Docling to convert, chunk, and enrich documents, and insert them into ChromaDB |
 | `mcp_server/` | MCP Server | FastMCP server exposing `search` and `fetch_document` tools |
 
 Each service has its own `pyproject.toml`, dependency declarations, and `uv.lock` lockfile.
 
-There is also a `scripts` folder, which currently includes a script for uploading files to the ingestion server.
+There is also a `scripts` folder, which currently includes a script for uploading files to the processing server.
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ There is also a `scripts` folder, which currently includes a script for uploadin
 
 3. Sync dependencies for the service you want to work on:
    ```bash
-   uv sync --directory ingestion
+   uv sync --directory management
    uv sync --directory processing
    uv sync --directory mcp_server
    uv sync --directory scripts
@@ -60,7 +60,7 @@ There is also a `scripts` folder, which currently includes a script for uploadin
 
 4. Activate the service's virtual environment (or use `uv run`):
    ```bash
-   source ingestion/.venv/bin/activate
+   source management/.venv/bin/activate
    ```
 
 ## Development Workflow
@@ -75,7 +75,7 @@ There is also a `scripts` folder, which currently includes a script for uploadin
 3. Run linting:
 
    ```bash
-   uv run --directory ingestion ruff check .
+   uv run --directory management ruff check .
    ```
 
    Repeat for `processing`, `mcp_server`, and `scripts` as needed.
@@ -116,7 +116,7 @@ uv run --directory <service> ruff check .
 CI runs `ruff check .` on all four service directories. You can run the same checks locally:
 
 ```bash
-uv run --directory ingestion ruff check .
+uv run --directory management ruff check .
 uv run --directory processing ruff check .
 uv run --directory mcp_server ruff check .
 uv run --directory scripts ruff check .
@@ -126,10 +126,10 @@ There is currently no auto-formatter configured. Run `ruff check --fix` to apply
 
 ## Running Tests
 
-Tests are not yet implemented. `pytest` is available as a dependency in the `ingestion` and `processing` services and can be used when writing tests:
+Tests are not yet implemented. `pytest` is available as a dependency in the `management` and `processing` services and can be used when writing tests:
 
 ```bash
-uv run --directory ingestion pytest
+uv run --directory management pytest
 ```
 
 Contributions that add test coverage are especially welcome.
@@ -143,7 +143,7 @@ docker compose up --build
 ```
 
 The services will be available at:
-- **Ingestion API**: `http://localhost:3000`
+- **Management API**: `http://localhost:3000`
 - **MCP Server**: `http://localhost:8080/mcp`
 - **ChromaDB**: internal (port `8000`)
 - **Ollama**: internal (port `11434`)

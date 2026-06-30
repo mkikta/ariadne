@@ -1,7 +1,7 @@
 [project]
-name = "ingestion"
+name = "management"
 version = "0.1.0"
-description = "Ariadne ingestion server."
+description = "Ariadne db management server."
 requires-python = ">=3.12"
 dependencies = [
     "chromadb>=1.5.9",

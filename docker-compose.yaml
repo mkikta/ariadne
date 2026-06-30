@@ -14,16 +14,14 @@ services:
      - chromadb
     restart: unless-stopped
 
-  ingestion-server:
-    build: ingestion/    
-    container_name: ingestion-server
+  management-server:
+    build: management/    
+    container_name: management-server
     ports:
       - "3000:3000"
     environment:
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
-      - PROCESSING_HOST=processing-server
-      - PROCESSING_PORT=3100
       - MODEL=${MODEL}
       - OLLAMA_HOST=ollama
       - OLLAMA_PORT=11434
@@ -31,7 +29,6 @@ services:
       - CHUNKS_COLLECTION=chunks
     depends_on:
       - chromadb
-      - processing-server
     restart: unless-stopped
 
   processing-server:
