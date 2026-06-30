@@ -1,0 +1,18 @@
+[project]
+name = "ingestion"
+version = "0.1.0"
+description = "Ariadne ingestion server."
+requires-python = ">=3.12"
+dependencies = [
+    "chromadb>=1.5.9",
+    "fastapi[standard]>=0.138.1",
+    "ollama>=0.6.2",
+    "pydantic>=2.13.4",
+    "pytest>=9.1.1",
+    "requests>=2.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.20",
+]

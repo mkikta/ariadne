@@ -1,0 +1,74 @@
+services:
+  mcp-server:
+    build: mcp_server/
+    container_name: mcp-server
+    ports:
+     - "8080:8080"
+    environment:
+     - CHROMA_HOST=chromadb
+     - CHROMA_PORT=8000
+     - DOCUMENT_COLLECTION=document
+     - CHUNKS_COLLECTION=chunks
+     - BASE_INSTRUCTIONS=
+     - CUSTOM_INSTRUCTIONS=${CUSTOM_INSTRUCTIONS}
+    depends_on:
+     - chromadb
+    restart: unless-stopped
+
+  ingestion-server:
+    build: ingestion/    
+    container_name: ingestion-server
+    ports:
+      - "3000:3000"
+    environment:
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+      - PROCESSING_HOST=processing-server
+      - PROCESSING_PORT=3100
+      - MODEL=${MODEL}
+      - OLLAMA_HOST=ollama
+      - OLLAMA_PORT=11434
+      - DOCUMENT_COLLECTION=document
+      - CHUNKS_COLLECTION=chunks
+    depends_on:
+      - chromadb
+      - processing-server
+    restart: unless-stopped
+
+  processing-server:
+    build: processing/            
+    container_name: processing-server
+    ports:
+      - "3100:3100"
+    environment:
+     - CHROMA_HOST=chromadb
+     - CHROMA_PORT=8000
+    depends_on:
+      - chromadb
+    restart: unless-stopped
+  
+  chromadb:
+    image: chromadb/chroma:1.5.9
+    container_name: chroma_server
+    ports:
+      - "8000:8000"
+    volumes:
+     - ./chromadb:/data
+    depends_on:
+     - ollama
+    restart: unless-stopped
+
+  ollama:
+   image: ollama/ollama:0.31.0
+   container_name: ollama_server
+   ports:
+    - "11434:11434"
+   volumes:
+    - ./ollama/ollama:/root/.ollama
+    - ./llm/serve_model.sh:/serve_model.sh
+   environment:
+    - MODEL=${MODEL}
+   pull_policy: always
+   tty: true
+   restart: always
+   entrypoint: ["/usr/bin/bash", "/serve_model.sh"]

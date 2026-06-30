@@ -1,0 +1,24 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --directory ingestion
+      - run: uv sync --directory processing
+      - run: uv sync --directory mcp_server
+      - run: uv sync --directory scripts
+      - run: uv run --directory ingestion ruff check .
+      - run: uv run --directory processing ruff check .
+      - run: uv run --directory mcp_server ruff check .
+      - run: uv run --directory scripts ruff check .
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose build

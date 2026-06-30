@@ -1,0 +1,18 @@
+[project]
+name = "processing"
+version = "0.1.0"
+description = "Ariadne processing server."
+requires-python = ">=3.12"
+dependencies = [
+    "chromadb>=1.5.9",
+    "docling>=2.107.0",
+    "fastapi[standard]>=0.138.1",
+    "ollama>=0.6.2",
+    "pytest>=9.1.1",
+    "rapidocr==3.8.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.20",
+]
