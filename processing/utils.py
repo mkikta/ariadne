@@ -17,6 +17,9 @@ from docling.document_converter import DocumentConverter
 from docling.datamodel.base_models import DocumentStream
 from docling.chunking import HybridChunker
 
+
+from .embeddings import EmbeddingFunctionFactory
+
 logger = logging.getLogger(__name__)
 _converter = DocumentConverter()
 
@@ -32,6 +35,42 @@ async def get_client():
     )
     yield client
 
+async def create_collection(
+    name: str,
+    embedding_backend: str | None = None,
+    model_name: str | None = None,
+    embedding_host: str | None = None,
+    embedding_port: str | None = None,
+):
+    """Create a new ChromaDB collection with optional embedding function.
+
+    Args:
+        name: Name of the collection to create
+        embedding_backend: Backend for embedding generation (e.g., "ollama")
+        model_name: Name of the embedding model to use
+        embedding_host: Host for the embedding backend
+        embedding_port: Port for the embedding backend
+
+    Raises:
+        Exception: If collection creation fails
+    """
+    if embedding_backend:
+        embedding_function = EmbeddingFunctionFactory.get_embedding_function(
+            embedding_backend,
+            model_name,
+            embedding_host,
+            embedding_port,
+        )
+        async with get_client() as client:
+            await client.get_or_create_collection(
+                name=name, embedding_function=embedding_function
+            )
+    else:
+        async with get_client() as client:
+            await client.get_or_create_collection(
+                name=name,
+                embedding_function=None,
+            )
 
 async def get_collection(name: str):
     """Get a ChromaDB collection by name.
@@ -46,6 +85,17 @@ async def get_collection(name: str):
         collection = await client.get_collection(name=name)
         return collection
 
+async def delete_collection(name: str):
+    """Delete a collection by its name.
+
+    Args:
+        name: Name of the collection to delete
+
+    Raises:
+        Exception: If collection deletion fails
+    """
+    async with get_client() as client:
+        await client.delete_collection(name=name)
 
 async def add_documents(
     collection_name: str,
@@ -75,6 +125,34 @@ async def add_documents(
             documents=documents,
         )
 
+async def delete_documents(collection_name: str, ids: list[str]):
+    """Delete documents from a collection.
+
+    Args:
+        collection_name: Name of the target collection
+        ids: List of document IDs to delete
+
+    Raises:
+        Exception: If document deletion fails
+    """
+    collection = await get_collection(collection_name)
+    await collection.delete(ids=ids)
+
+async def get_all_documents(collection_name: str):
+    """Get all documents from a collection.
+
+    Args:
+        collection_name: Name of the collection to retrieve documents from
+
+    Returns:
+        dict: Query results containing all documents in the collection
+
+    Raises:
+        Exception: If document retrieval fails
+    """
+    collection = await get_collection(collection_name)
+    results = await collection.get()
+    return results
 
 def process_document(filename: str, file_bytes: bytes):
     """Convert a document file to markdown and extract chunks.
@@ -102,7 +180,6 @@ def process_document(filename: str, file_bytes: bytes):
     chunks = [chunker.contextualize(chunk=chunk) for chunk in chunk_iter]
 
     return dl_doc.export_to_markdown(), chunks
-
 
 async def _pipeline(
     document_collection_name: str,
@@ -139,7 +216,6 @@ async def _pipeline(
             {"document_id": document_id, "chunk_idx": i} for i in range(len(chunks))
         ],
     )
-
 
 async def run_pipeline(
     document_collection_name: str,

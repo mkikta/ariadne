@@ -5,11 +5,16 @@ description = "Ariadne processing server."
 requires-python = ">=3.12"
 dependencies = [
     "chromadb>=1.5.9",
+    "coverage>=7.15.0",
     "docling>=2.107.0",
     "fastapi[standard]>=0.138.1",
+    "httpx2>=2.5.0",
     "ollama>=0.6.2",
     "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-mock>=3.15.1",
     "rapidocr==3.8.0",
+    "testcontainers[chroma]>=4.14.2",
 ]
 
 [dependency-groups]

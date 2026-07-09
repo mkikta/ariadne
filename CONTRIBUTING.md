@@ -17,11 +17,10 @@ Thank you for your interest in contributing to Ariadne! This document outlines t
 
 ## Project Structure
 
-Ariadne is a multi-service application composed of three services, each in its own directory:
+Ariadne is a multi-service application composed of two services, each in its own directory:
 
 | Directory | Service | Description |
 |---|---|---|
-| `management/` | Management Server | FastAPI server for ChromaDB collection management |
 | `processing/` | Processing Server | FastAPI server using Docling to convert, chunk, and enrich documents, and insert them into ChromaDB |
 | `mcp_server/` | MCP Server | FastMCP server exposing `search` and `fetch_document` tools |
 
@@ -50,7 +49,6 @@ There is also a `scripts` folder, which currently includes a script for uploadin
 
 3. Sync dependencies for the service you want to work on:
    ```bash
-   uv sync --directory management
    uv sync --directory processing
    uv sync --directory mcp_server
    uv sync --directory scripts
@@ -58,9 +56,9 @@ There is also a `scripts` folder, which currently includes a script for uploadin
 
    Each service is independently managed. You only need to sync the directories relevant to your changes.
 
-4. Activate the service's virtual environment (or use `uv run`):
+4. Activate a service's virtual environment (or use `uv run`):
    ```bash
-   source management/.venv/bin/activate
+   source processing/.venv/bin/activate
    ```
 
 ## Development Workflow
@@ -75,10 +73,10 @@ There is also a `scripts` folder, which currently includes a script for uploadin
 3. Run linting:
 
    ```bash
-   uv run --directory management ruff check .
+   uv run --directory processing ruff check .
    ```
 
-   Repeat for `processing`, `mcp_server`, and `scripts` as needed.
+   Repeat for `mcp_server` and `scripts` as needed.
 
 4. If running the full stack is required, start Docker Compose:
 
@@ -113,10 +111,9 @@ uv run --directory <service> ruff check .
 
 ## Running Linting
 
-CI runs `ruff check .` on all four service directories. You can run the same checks locally:
+CI runs `ruff check .` on all three service directories. You can run the same checks locally:
 
 ```bash
-uv run --directory management ruff check .
 uv run --directory processing ruff check .
 uv run --directory mcp_server ruff check .
 uv run --directory scripts ruff check .
@@ -126,11 +123,17 @@ There is currently no auto-formatter configured. Run `ruff check --fix` to apply
 
 ## Running Tests
 
-Tests are not yet implemented. `pytest` is available as a dependency in the `management` and `processing` services and can be used when writing tests:
+Tests use **pytest** and are organized into unit and integration tests within the `processing` service:
 
 ```bash
-uv run --directory management pytest
+# Unit tests (no external dependencies required)
+uv run --directory processing pytest tests/unit -v
+
+# Integration tests (uses testcontainers for ChromaDB)
+uv run --directory processing pytest tests/integration -v
 ```
+
+CI runs both test suites automatically on every push and PR. The top-level `tests/` directory contains scaffolding for future contract and end-to-end tests.
 
 Contributions that add test coverage are especially welcome.
 
@@ -143,7 +146,7 @@ docker compose up --build
 ```
 
 The services will be available at:
-- **Management API**: `http://localhost:3000`
+- **Processing Server**: `http://localhost:3000`
 - **MCP Server**: `http://localhost:8080/mcp`
 - **ChromaDB**: internal (port `8000`)
 - **Ollama**: internal (port `11434`)

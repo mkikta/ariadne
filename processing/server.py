@@ -6,7 +6,7 @@ All processing is performed asynchronously using background tasks.
 """
 
 from fastapi import FastAPI, UploadFile, File, BackgroundTasks, Form
-import utils
+from . import utils
 
 app = FastAPI()
 

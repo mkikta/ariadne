@@ -2,7 +2,8 @@
 .env
 __pycache__
 .pytest_cache
-data
+.ruff_cache
+todo
 ollama
 chromadb
 rapidocr
