@@ -43,13 +43,15 @@ services:
     restart: unless-stopped
 
   ollama:
-   build: llm/
+   build:
+    context: llm/
+    args:
+     MODEL: ${MODEL:-qwen3-embedding:0.6b}
    container_name: ollama_server
    ports:
     - "11434:11434"
    volumes:
     - ./ollama/ollama:/root/.ollama
    environment:
-    - MODEL=${MODEL}
-   # tty: true
+    - MODEL=${MODEL:-qwen3-embedding:0.6b}
    restart: always

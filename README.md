@@ -9,7 +9,7 @@ Ariadne, daughter of King Minos, helped Theseus escape from the Minotaur with a 
 Ariadne, the MCP server, helps your agents escape from the complex maze of your unstructured data.
 
 > [!WARNING]
-> This repository is a rough work-in-progress.
+> This repository is a work-in-progress.
 
 ## 🌟 Highlights
 
