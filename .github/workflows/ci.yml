@@ -33,8 +33,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Build ollama image with baked-in model
-        run: docker build --tag ollama-qwen --build-arg MODEL=qwen3-embedding:0.6b llm/
       - run: uv sync --directory processing
       - run: uv run --directory processing pytest tests/integration -v
   docker:

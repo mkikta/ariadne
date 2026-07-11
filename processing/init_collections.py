@@ -3,7 +3,7 @@
 import asyncio
 import logging
 import os
-import utils
+from . import utils
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

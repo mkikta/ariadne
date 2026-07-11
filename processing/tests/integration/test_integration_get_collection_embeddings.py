@@ -11,10 +11,19 @@ chroma = (
     .with_exposed_ports(8000)
 )
 
+current_dir = os.path.abspath(os.path.dirname(__file__))
+ollama_data_path = os.path.join(current_dir, "ollama")
+serve_script_path = os.path.join(current_dir, "llm", "serve_model.sh")
+
 ollama = (
-    DockerContainer("ollama-qwen")
-    .with_exposed_ports(11434)
-)
+        DockerContainer("ollama/ollama:0.31.0")
+        .with_exposed_ports(11434)
+        .with_env("MODEL", os.getenv("MODEL", "qwen3-embedding:0.6b")) 
+        .with_bind_ports(11434, 11434) 
+        .with_volume_mapping(ollama_data_path, "/root/.ollama", mode="rw")
+        .with_volume_mapping(serve_script_path, "/serve_model.sh", mode="rw")
+    )
+    
 
 @pytest.fixture(scope="module", autouse=True)
 def setup(request):
