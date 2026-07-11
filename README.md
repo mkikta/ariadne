@@ -1,8 +1,8 @@
 # 🧶 Ariadne
 
-[![Ruff](https://custom-icon-badges.demolab.com/badge/Ruff-261230.svg?logo=ruff-logo)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml)
-[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml)
-[![Pytest](https://img.shields.io/badge/Pytest-fff?logo=pytest&logoColor=000)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml)
+[![Ruff](https://custom-icon-badges.demolab.com/badge/Ruff-261230.svg?logo=ruff-logo)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml/lint)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml/docker)
+[![Pytest](https://img.shields.io/badge/Pytest-fff?logo=pytest&logoColor=000)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml/processing-unit-tests)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Ariadne, daughter of King Minos, helped Theseus escape from the Minotaur with a thread through the Labyrinth.
