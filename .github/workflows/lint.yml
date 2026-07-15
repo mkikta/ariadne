@@ -16,5 +16,5 @@ jobs:
       - run: uv run --directory processing ruff check .
       - run: uv run --directory mcp_server ruff check .
       - run: uv run --directory scripts ruff check .
-      - run: uv sync --directory tests ruff check .
+      - run: uv run --directory tests ruff check .
   
