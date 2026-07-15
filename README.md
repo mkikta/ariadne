@@ -1,6 +1,6 @@
 # 🧶 Ariadne
 
-[![Lint](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/lint.yml?label=lint&logo=ruff&logoColor=fff)](https://github.com/mkikta/ariadne/actions/workflows/lint.yml)
+[![Ruff](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/lint.yml?label=lint&logo=ruff&logoColor=fff)](https://github.com/mkikta/ariadne/actions/workflows/lint.yml)
 [![Docker](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/docker.yml?label=docker&logo=docker&logoColor=fff)](https://github.com/mkikta/ariadne/actions/workflows/docker.yml)
 [![Tests](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/tests.yml?label=tests&logo=pytest&logoColor=fff)](https://github.com/mkikta/ariadne/actions/workflows/tests.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)

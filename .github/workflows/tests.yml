@@ -21,4 +21,14 @@ jobs:
           python-version: "3.12"
       - run: uv sync --directory processing
       - run: uv run --directory processing pytest tests/integration -v
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --directory tests
+      - run: uv run --directory tests pytest e2e -v
       

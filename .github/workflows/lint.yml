@@ -12,7 +12,9 @@ jobs:
       - run: uv sync --directory processing
       - run: uv sync --directory mcp_server
       - run: uv sync --directory scripts
+      - run: uv sync --directory tests
       - run: uv run --directory processing ruff check .
       - run: uv run --directory mcp_server ruff check .
       - run: uv run --directory scripts ruff check .
+      - run: uv sync --directory tests ruff check .
   
