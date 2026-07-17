@@ -1,7 +1,8 @@
 # 🧶 Ariadne
 
-[![Lint](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/ci.yml?label=lint&job=lint)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml)
-[![Docker](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/ci.yml?label=docker&job=docker)](https://github.com/mkikta/ariadne/actions/workflows/ci.yml)
+[![Ruff](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/lint.yml?label=lint&logo=ruff&logoColor=fff)](https://github.com/mkikta/ariadne/actions/workflows/lint.yml)
+[![Docker](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/docker.yml?label=docker&logo=docker&logoColor=fff)](https://github.com/mkikta/ariadne/actions/workflows/docker.yml)
+[![Tests](https://img.shields.io/github/actions/workflow/status/mkikta/ariadne/tests.yml?label=tests&logo=pytest&logoColor=fff)](https://github.com/mkikta/ariadne/actions/workflows/tests.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 Ariadne, daughter of King Minos, helped Theseus escape from the Minotaur with a thread through the Labyrinth.
@@ -24,7 +25,6 @@ Features:
 
 Ariadne consists of a few main components:
 
-* A management server that interacts with the [ChromaDB](https://www.trychroma.com) database.
 * A processing server that uses [Docling](https://www.docling.ai), to convert, serialize, chunk, and enrich documents before inserting them into the ChromaDB database.
 * A ChromaDB database, that stores the serialized and chunked documents, using [Ollama](https://ollama.com) to serve the embedding model.
 * A [FastMCP](https://gofastmcp.com/getting-started/welcome) server that MCP clients can connect to to query the database for full documents by id or to query for document chunks by semantic meaning.
@@ -39,7 +39,7 @@ Ariadne consists of a few main components:
 5. Navigate to the repository: `cd ariadne`
 6. Copy `.env.example` to `.env`. Optionally, add custom instructions to the MCP server by setting CUSTOM_INSTRUCTIONS and change the embedding model to any Ollama-supported embedding model.
 7. Run Ariadne: `docker compose up --build`
-The management API will be hosted at http://localhost:3000, the MCP server will be hosted at http://localhost:8080/mcp, and if you use the out-of-the-box configuration, [qwen3-embedding:0.6b](https://huggingface.co/Qwen/Qwen3-Embedding-0.6B) will be used for embeddings. 
+The MCP server will be hosted at http://localhost:8080/mcp, and if you use the out-of-the-box configuration, [qwen3-embedding:0.6b](https://huggingface.co/Qwen/Qwen3-Embedding-0.6B) will be used for embeddings. 
 
 > [!WARNING]
 > Once you set a model, you must continue to use the same model to use the same persisted ChromaDB database.
@@ -69,13 +69,16 @@ The Ariadne MCP server is compatible with any non-web-based MCP client, such as 
 
 ## 🗺️ Roadmap
 
+- [ ] Add message queue to processing server, and add endpoint for checking job status.
+
 - [ ] Enhance the Docling processing pipeline to include image annotation; code, figure, and formula enrichment; table header repetition; smarter chunking; and possibly entity recognition.
+
+- [ ] Add more model backends.
 
 - [ ] Add a user-friendly dashboard for document upload.
 
 - [ ] Add integrations to common data sources, including Google Drive, Microsoft 365, Notion, etc.
 
-- [ ] Add more model backends.
 
 ### ✍️ Author
 

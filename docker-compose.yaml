@@ -10,35 +10,26 @@ services:
      - DOCUMENT_COLLECTION=document
      - CHUNKS_COLLECTION=chunks
      - CUSTOM_INSTRUCTIONS=${CUSTOM_INSTRUCTIONS}
+     - OLLAMA_HOST=ollama
+     - OLLAMA_PORT=11434
+     - MODEL=${MODEL}
     depends_on:
      - chromadb
-    restart: unless-stopped
-
-  management-server:
-    build: management/    
-    container_name: management-server
-    ports:
-      - "3000:3000"
-    environment:
-      - CHROMA_HOST=chromadb
-      - CHROMA_PORT=8000
-      - MODEL=${MODEL}
-      - OLLAMA_HOST=ollama
-      - OLLAMA_PORT=11434
-      - DOCUMENT_COLLECTION=document
-      - CHUNKS_COLLECTION=chunks
-    depends_on:
-      - chromadb
     restart: unless-stopped
 
   processing-server:
     build: processing/            
     container_name: processing-server
     ports:
-      - "3100:3100"
+      - "3000:3000"
     environment:
      - CHROMA_HOST=chromadb
      - CHROMA_PORT=8000
+     - DOCUMENT_COLLECTION=document
+     - CHUNKS_COLLECTION=chunks
+     - OLLAMA_HOST=ollama
+     - OLLAMA_PORT=11434
+     - MODEL=${MODEL}
     depends_on:
       - chromadb
     restart: unless-stopped
@@ -60,7 +51,7 @@ services:
    ports:
     - "11434:11434"
    volumes:
-    - ./ollama/ollama:/root/.ollama
+    - ./ollama:/root/.ollama
     - ./llm/serve_model.sh:/serve_model.sh
    environment:
     - MODEL=${MODEL}

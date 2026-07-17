@@ -131,7 +131,10 @@ async def fetch_document(name: str | None = None, document_id: str | None = None
         if name:
             results = await collection.get(where={"name": name})
 
-    return results["documents"][0], results["metadatas"][0]
+    if results["documents"]:
+        if results["metadatas"]:
+            return results["documents"][0], results["metadatas"][0]
+        return results["documents"][0]
 
 
 @mcp.custom_route("/health", methods=["GET"])

@@ -5,8 +5,9 @@ queuing documents for processing through the document pipeline.
 All processing is performed asynchronously using background tasks.
 """
 
-from fastapi import FastAPI, UploadFile, File, BackgroundTasks, Form
-import utils
+from fastapi import FastAPI, UploadFile, File, BackgroundTasks, Form, Body
+from . import utils
+from typing import Any
 
 app = FastAPI()
 
@@ -22,6 +23,25 @@ async def health():
     """
     return {"message": "Healthy!"}
 
+@app.post("/add_documents/")
+async def add_documents(
+    collection_name: str = Body(),
+    documents: list[str] = Body(),
+    ids: list[str] = Body(),
+    metadatas: list[dict[str, Any]] = Body(),
+):
+    """Add documents directly to a ChromaDB collection.
+    You probably do not want to use this directly.
+
+    Args:
+        collection_name: Name of the target ChromaDB collection.
+        documents: List of document text content.
+        ids: List of document IDs.
+        metadatas: List of metadata dictionaries for each document.
+    """
+    await utils.add_documents(
+        collection_name, ids, documents, metadatas
+    )
 
 @app.post("/process_document/")
 async def process_document(

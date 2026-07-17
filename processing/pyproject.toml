@@ -7,12 +7,16 @@ dependencies = [
     "chromadb>=1.5.9",
     "docling>=2.107.0",
     "fastapi[standard]>=0.138.1",
+    "httpx2>=2.5.0",
     "ollama>=0.6.2",
-    "pytest>=9.1.1",
     "rapidocr==3.8.0",
 ]
 
 [dependency-groups]
 dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-mock>=3.15.1",
     "ruff>=0.15.20",
+    "testcontainers[chroma]>=4.14.2",
 ]

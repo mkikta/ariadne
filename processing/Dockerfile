@@ -12,7 +12,7 @@ COPY pyproject.toml uv.lock .python-version ./
 
 RUN uv sync --frozen --no-install-project
 
-COPY utils.py .
-COPY server.py .
+RUN mkdir -p /app/processing
+COPY __init__.py utils.py embeddings.py init_collections.py server.py /app/processing/
 
-CMD ["uv", "run", "fastapi", "run", "server.py", "--port", "3100"]
+CMD ["sh", "-c", "uv run fastapi run processing/server.py --port 3000 & uv run python -m processing.init_collections && wait"]
