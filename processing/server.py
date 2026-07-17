@@ -5,8 +5,9 @@ queuing documents for processing through the document pipeline.
 All processing is performed asynchronously using background tasks.
 """
 
-from fastapi import FastAPI, UploadFile, File, BackgroundTasks, Form
+from fastapi import FastAPI, UploadFile, File, BackgroundTasks, Form, Body
 from . import utils
+from typing import Any
 
 app = FastAPI()
 
@@ -22,6 +23,16 @@ async def health():
     """
     return {"message": "Healthy!"}
 
+@app.post("/add_documents/")
+async def add_documents(
+    collection_name: str = Body(),
+    documents: list[str] = Body(),
+    ids: list[str] = Body(),
+    metadatas: list[dict[str, Any]] = Body(),
+):
+    await utils.add_documents(
+        collection_name, ids, documents, metadatas
+    )
 
 @app.post("/process_document/")
 async def process_document(

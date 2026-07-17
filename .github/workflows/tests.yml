@@ -21,6 +21,26 @@ jobs:
           python-version: "3.12"
       - run: uv sync --directory processing
       - run: uv run --directory processing pytest tests/integration -v
+  mcp-server-unit-tests:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: astral-sh/setup-uv@v5
+        - uses: actions/setup-python@v5
+          with:
+            python-version: "3.12"
+        - run: uv sync --directory mcp_server
+        - run: uv run --directory mcp_server pytest tests/unit -v
+  processing-integration-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --directory mcp_server
+      - run: uv run --directory mcp_server pytest tests/integration -v
   e2e-tests:
     runs-on: ubuntu-latest
     steps:

@@ -5,7 +5,7 @@ from processing import utils
 from testcontainers.core.container import DockerContainer
 
 chroma = (
-    DockerContainer("chromadb/chroma:latest")
+    DockerContainer("chromadb/chroma:1.5.9")
     .with_exposed_ports(8000)
 )
 
