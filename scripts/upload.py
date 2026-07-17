@@ -8,6 +8,11 @@ import mimetypes
 ENDPOINT="http://localhost:3000/process_document/"
 
 def upload_file(path: Path):
+    """Upload a single file to the processing endpoint.
+
+    Args:
+        path: Path to the file to upload.
+    """
     with open(path, "rb") as file:
         mime_type, _ = mimetypes.guess_type(path) or (None, None)
         response = requests.post(
@@ -20,6 +25,11 @@ def upload_file(path: Path):
             print(f"Error uploading {path}. It has been skipped.")
 
 def upload_dir(path: Path):
+    """Recursively upload all files in a directory.
+
+    Args:
+        path: Path to the directory to scan and upload.
+    """
     for item in path.iterdir():
         if item.is_file():
             upload_file(item)
@@ -27,6 +37,14 @@ def upload_dir(path: Path):
             upload_dir(item)
 
 def main(paths: list[str]):
+    """Upload files or directories to the Ariadne processing service.
+
+    Accepts paths to files and directories. Directories are walked
+    recursively.
+
+    Args:
+        paths: List of file or directory paths to upload.
+    """
     for path in paths:
         path = Path(path)
         if path.is_file():

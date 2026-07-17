@@ -30,6 +30,15 @@ async def add_documents(
     ids: list[str] = Body(),
     metadatas: list[dict[str, Any]] = Body(),
 ):
+    """Add documents directly to a ChromaDB collection.
+    You probably do not want to use this directly.
+
+    Args:
+        collection_name: Name of the target ChromaDB collection.
+        documents: List of document text content.
+        ids: List of document IDs.
+        metadatas: List of metadata dictionaries for each document.
+    """
     await utils.add_documents(
         collection_name, ids, documents, metadatas
     )

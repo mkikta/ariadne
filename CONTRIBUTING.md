@@ -17,16 +17,14 @@ Thank you for your interest in contributing to Ariadne! This document outlines t
 
 ## Project Structure
 
-Ariadne is a multi-service application composed of two services, each in its own directory:
+Ariadne is a multi-service application. Each service lives in its own directory with a `pyproject.toml`, dependency declarations, and `uv.lock` lockfile:
 
 | Directory | Service | Description |
 |---|---|---|
 | `processing/` | Processing Server | FastAPI server using Docling to convert, chunk, and enrich documents, and insert them into ChromaDB |
 | `mcp_server/` | MCP Server | FastMCP server exposing `search` and `fetch_document` tools |
-
-Each service has its own `pyproject.toml`, dependency declarations, and `uv.lock` lockfile.
-
-There is also a `scripts` folder, which currently includes a script for uploading files to the processing server.
+| `scripts/` | CLI Scripts | Upload script for batch-loading files into the processing server |
+| `tests/` | End-to-End Tests | Integration tests that spin up the full stack via testcontainers |
 
 ## Prerequisites
 
@@ -52,6 +50,7 @@ There is also a `scripts` folder, which currently includes a script for uploadin
    uv sync --directory processing
    uv sync --directory mcp_server
    uv sync --directory scripts
+   uv sync --directory tests
    ```
 
    Each service is independently managed. You only need to sync the directories relevant to your changes.
@@ -70,10 +69,11 @@ There is also a `scripts` folder, which currently includes a script for uploadin
 
 2. Make your changes, following the [coding standards](#coding-standards) below.
 
-3. Run linting:
+3. Run linting and tests:
 
    ```bash
    uv run --directory processing ruff check .
+   uv run --directory processing pytest tests/unit -v
    ```
 
    Repeat for `mcp_server` and `scripts` as needed.
@@ -111,31 +111,39 @@ uv run --directory <service> ruff check .
 
 ## Running Linting
 
-CI runs `ruff check .` on all three service directories. You can run the same checks locally:
+CI runs `ruff check .` on all four service directories. You can run the same checks locally:
 
 ```bash
 uv run --directory processing ruff check .
 uv run --directory mcp_server ruff check .
 uv run --directory scripts ruff check .
+uv run --directory tests ruff check .
 ```
 
 There is currently no auto-formatter configured. Run `ruff check --fix` to apply automatic fixes where supported.
 
 ## Running Tests
 
-Tests use **pytest** and are organized into unit and integration tests within the `processing` service:
+Tests use **pytest** and are organized by service:
 
 ```bash
-# Unit tests (no external dependencies required)
+# Processing unit tests (no external dependencies required)
 uv run --directory processing pytest tests/unit -v
 
-# Integration tests (uses testcontainers for ChromaDB)
+# Processing integration tests (uses testcontainers for ChromaDB)
 uv run --directory processing pytest tests/integration -v
+
+# MCP server unit tests
+uv run --directory mcp_server pytest tests/unit -v
+
+# MCP server integration tests
+uv run --directory mcp_server pytest tests/integration -v
+
+# End-to-end tests (spins up full stack via testcontainers)
+uv run --directory tests pytest e2e -v
 ```
 
-CI runs both test suites automatically on every push and PR. The top-level `tests/` directory contains scaffolding for future contract and end-to-end tests.
-
-Contributions that add test coverage are especially welcome.
+CI runs all test suites automatically on every push and PR. Contributions that add test coverage are especially welcome.
 
 ## Docker Compose
 
@@ -154,7 +162,7 @@ The services will be available at:
 ## Pull Request Process
 
 1. Ensure your branch is up to date with `main`.
-2. Ensure all CI checks pass (linting + Docker build).
+2. Ensure all CI checks pass (linting, tests, and Docker build).
 3. Open a pull request against `main` with a clear title and description.
 4. Keep changes focused. If a change touches multiple services, consider splitting into separate PRs.
 5. A maintainer will review your PR and may request changes.

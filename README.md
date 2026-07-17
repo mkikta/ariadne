@@ -69,13 +69,16 @@ The Ariadne MCP server is compatible with any non-web-based MCP client, such as 
 
 ## 🗺️ Roadmap
 
+- [ ] Add message queue to processing server, and add endpoint for checking job status.
+
 - [ ] Enhance the Docling processing pipeline to include image annotation; code, figure, and formula enrichment; table header repetition; smarter chunking; and possibly entity recognition.
+
+- [ ] Add more model backends.
 
 - [ ] Add a user-friendly dashboard for document upload.
 
 - [ ] Add integrations to common data sources, including Google Drive, Microsoft 365, Notion, etc.
 
-- [ ] Add more model backends.
 
 ### ✍️ Author
 

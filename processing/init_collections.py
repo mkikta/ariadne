@@ -10,6 +10,15 @@ logger = logging.getLogger(__name__)
 
 
 async def initialize_collections():
+    """Initialize ChromaDB collections on startup.
+
+    Waits for ChromaDB to become available, then creates the document
+    collection (no embeddings) and the chunks collection (with Ollama
+    embeddings).
+
+    Raises:
+        Exception: If ChromaDB remains unreachable after all retries.
+    """
     max_retries = 10
     for attempt in range(max_retries):
         try:
