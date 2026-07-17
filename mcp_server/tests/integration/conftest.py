@@ -1,7 +1,6 @@
 import os
 import pytest
 import chromadb
-from dotenv import load_dotenv
 from chromadb.utils.embedding_functions.ollama_embedding_function import (
     OllamaEmbeddingFunction,
 )
