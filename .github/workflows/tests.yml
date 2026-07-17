@@ -31,7 +31,7 @@ jobs:
             python-version: "3.12"
         - run: uv sync --directory mcp_server
         - run: uv run --directory mcp_server pytest tests/unit -v
-  processing-integration-tests:
+  mcp-server-integration-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
