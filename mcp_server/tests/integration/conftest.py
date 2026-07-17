@@ -8,9 +8,6 @@ from chromadb.utils.embedding_functions.ollama_embedding_function import (
 from testcontainers.core.container import DockerContainer
 from testcontainers.core.wait_strategies import LogMessageWaitStrategy
 
-
-load_dotenv()
-
 @pytest.fixture(scope="module", autouse=True)
 def setup(request):
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -48,6 +45,8 @@ def setup(request):
     os.environ["CHROMA_PORT"] = str(chroma.get_exposed_port(8000))
     os.environ["OLLAMA_HOST"] = ollama.get_container_host_ip()
     os.environ["OLLAMA_PORT"] = str(ollama.get_exposed_port(11434))
+    os.environ["CHUNKS_COLLECTION"] = "chunks"
+    os.environ["DOCUMENT_COLLECTION"] = "document"
 
     client = chromadb.HttpClient(
         host=os.getenv("CHROMA_HOST"), port=int(os.getenv("CHROMA_PORT"))
